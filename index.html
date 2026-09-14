@@ -1,0 +1,375 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Федерация рафтинга и гребного слалома Томской области: спортивные направления, история, соревнования и проект «Маршрут здоровья».">
+  <meta name="theme-color" content="#071b19">
+  <title>Федерация рафтинга и гребного слалома Томской области</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Unbounded:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #071b19;
+      --ink-soft: #0c2825;
+      --paper: #f1f4ed;
+      --paper-soft: #e5ebe3;
+      --muted: #a8b9b1;
+      --line: rgba(230, 241, 235, .18);
+      --orange: #ff5b2d;
+      --aqua: #85d6cc;
+      --display: "Unbounded", sans-serif;
+      --body: "Manrope", sans-serif;
+      --ease: cubic-bezier(.2,.75,.25,1);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--ink);
+      color: var(--paper);
+      font-family: var(--body);
+      font-size: 16px;
+      line-height: 1.6;
+      overflow-x: hidden;
+      text-rendering: optimizeLegibility;
+    }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; }
+    img { display: block; max-width: 100%; }
+    ::selection { background: var(--orange); color: #fff; }
+
+    .shell { width: min(100% - 40px, 1240px); margin-inline: auto; }
+    .skip-link { position: fixed; left: 16px; top: -100px; z-index: 100; padding: 10px 14px; color: var(--ink); background: var(--paper); }
+    .skip-link:focus { top: 16px; }
+
+    .site-header {
+      position: absolute;
+      inset: 0 0 auto;
+      z-index: 20;
+      border-bottom: 1px solid rgba(255,255,255,.14);
+    }
+    .nav { min-height: 82px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+    .brand { display: flex; align-items: center; gap: 12px; max-width: 330px; }
+    .brand-mark {
+      width: 42px; height: 42px; flex: 0 0 auto; border-radius: 50%;
+      display: grid; place-items: center; border: 1px solid rgba(255,255,255,.55);
+    }
+    .brand-mark svg { width: 24px; }
+    .brand-name { font: 600 .7rem/1.35 var(--display); letter-spacing: .035em; text-transform: uppercase; }
+    .nav-links { display: flex; align-items: center; gap: 28px; font-size: .85rem; font-weight: 600; }
+    .nav-links a { position: relative; padding-block: 10px; }
+    .nav-links a::after { content: ""; position: absolute; inset: auto 0 4px; height: 1px; background: var(--orange); transform: scaleX(0); transform-origin: left; transition: transform 160ms var(--ease); }
+    .nav-links a:hover::after, .nav-links a:focus-visible::after { transform: scaleX(1); }
+    .menu-toggle { display: none; width: 44px; height: 44px; border: 1px solid var(--line); border-radius: 50%; color: var(--paper); background: rgba(7,27,25,.28); }
+
+    .hero { position: relative; min-height: 850px; height: 100svh; isolation: isolate; overflow: hidden; }
+    .hero-media { position: absolute; inset: 0; z-index: -2; }
+    .hero-media img { width: 100%; height: 100%; object-fit: cover; object-position: 58% center; }
+    .hero-media::after {
+      content: ""; position: absolute; inset: 0;
+      background:
+        linear-gradient(90deg, rgba(4,20,18,.94) 0%, rgba(4,20,18,.72) 42%, rgba(4,20,18,.12) 76%),
+        linear-gradient(0deg, rgba(4,20,18,.88) 0%, transparent 46%, rgba(4,20,18,.26) 100%);
+    }
+    .hero::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: var(--line); }
+    .hero-inner { height: 100%; display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(280px, .9fr); align-items: end; padding-block: 160px 72px; }
+    .hero-copy { max-width: 860px; }
+    .eyebrow { display: flex; align-items: center; gap: 14px; margin: 0 0 24px; color: #cbd7d2; font-size: .74rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
+    .eyebrow::before { content: ""; width: 44px; height: 2px; background: var(--orange); }
+    h1, h2, h3 { margin: 0; font-family: var(--display); text-wrap: balance; }
+    h1 { max-width: 850px; font-size: clamp(3.3rem, 7.2vw, 7rem); line-height: .94; letter-spacing: -.055em; text-transform: uppercase; }
+    h1 span { display: block; color: transparent; -webkit-text-stroke: 1px rgba(241,244,237,.8); }
+    .hero-lead { max-width: 590px; margin: 32px 0 0; font-size: clamp(1.05rem, 1.7vw, 1.28rem); color: #d7e0db; line-height: 1.55; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 34px; }
+    .btn { min-height: 52px; padding: 0 24px; display: inline-flex; align-items: center; justify-content: center; gap: 12px; border: 1px solid transparent; font-size: .86rem; font-weight: 700; letter-spacing: .02em; transition: transform 160ms var(--ease), background 160ms var(--ease), border-color 160ms var(--ease); }
+    .btn:hover { transform: translateY(-2px); }
+    .btn-primary { background: var(--orange); color: #fff; }
+    .btn-primary:hover { background: #ef4d20; }
+    .btn-ghost { border-color: rgba(255,255,255,.38); background: rgba(7,27,25,.25); backdrop-filter: blur(8px); }
+    .hero-aside { justify-self: end; align-self: end; width: min(100%, 300px); padding: 22px 0 6px; border-top: 1px solid rgba(255,255,255,.4); }
+    .hero-aside strong { display: block; font: 600 2rem/1 var(--display); }
+    .hero-aside span { display: block; margin-top: 9px; color: #c1cec8; font-size: .86rem; }
+
+    .stats { background: var(--orange); color: #fff; }
+    .stats-grid { min-height: 152px; display: grid; grid-template-columns: repeat(4, 1fr); }
+    .stat { display: flex; flex-direction: column; justify-content: center; padding: 24px clamp(16px, 3vw, 40px); border-right: 1px solid rgba(255,255,255,.32); }
+    .stat:first-child { padding-left: 0; }
+    .stat:last-child { border-right: 0; }
+    .stat strong { font: 600 clamp(1.65rem, 3vw, 2.8rem)/1 var(--display); letter-spacing: -.04em; }
+    .stat span { margin-top: 9px; font-size: .78rem; font-weight: 600; letter-spacing: .045em; text-transform: uppercase; }
+
+    .section { padding-block: clamp(88px, 11vw, 152px); }
+    .section-kicker { margin: 0 0 18px; color: var(--orange); font-size: .72rem; font-weight: 800; letter-spacing: .15em; text-transform: uppercase; }
+    .section-title { font-size: clamp(2.35rem, 5vw, 5rem); line-height: 1.03; letter-spacing: -.045em; }
+    .section-intro { max-width: 640px; margin: 28px 0 0; color: #bfd0c8; font-size: clamp(1rem, 1.4vw, 1.15rem); }
+
+    .history { background: var(--paper); color: var(--ink); }
+    .history-head { display: grid; grid-template-columns: 1fr .75fr; gap: 64px; align-items: end; }
+    .history .section-intro { color: #405852; }
+    .timeline { margin-top: 76px; border-top: 1px solid rgba(7,27,25,.24); }
+    .timeline-row { display: grid; grid-template-columns: 150px 1fr 42px; gap: 26px; align-items: start; padding: 28px 0; border-bottom: 1px solid rgba(7,27,25,.18); }
+    .timeline-year { font: 600 1.65rem/1 var(--display); color: var(--orange); }
+    .timeline-row p { margin: 0; max-width: 760px; font-size: 1rem; }
+    .timeline-index { justify-self: end; color: #73847f; font-size: .72rem; }
+
+    .disciplines { position: relative; overflow: hidden; }
+    .disciplines::before { content: "R4 / R6 / K1 / C1"; position: absolute; right: -2vw; top: 13%; color: rgba(255,255,255,.035); font: 700 clamp(4rem, 10vw, 10rem)/1 var(--display); white-space: nowrap; }
+    .discipline-grid { display: grid; grid-template-columns: 1fr 1fr; margin-top: 74px; border-top: 1px solid var(--line); }
+    .discipline { min-height: 420px; padding: 44px 42px 40px 0; display: flex; flex-direction: column; justify-content: space-between; border-right: 1px solid var(--line); }
+    .discipline + .discipline { padding-left: 42px; padding-right: 0; border-right: 0; }
+    .discipline-no { color: var(--aqua); font-size: .72rem; font-weight: 800; letter-spacing: .14em; }
+    .discipline h3 { margin-top: auto; font-size: clamp(2rem, 4vw, 4rem); letter-spacing: -.045em; }
+    .discipline p { max-width: 520px; margin: 22px 0 0; color: #b8cac2; }
+
+    .place { background: var(--paper-soft); color: var(--ink); }
+    .place-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(320px, .78fr); gap: 9vw; align-items: start; }
+    .place .section-intro { color: #405852; }
+    .river-note { margin-top: 44px; padding-left: 28px; border-left: 3px solid var(--orange); font-size: 1.2rem; line-height: 1.55; }
+    .project-panel { padding-top: 8px; }
+    .project-panel h3 { font-size: clamp(1.65rem, 3vw, 2.7rem); line-height: 1.18; }
+    .project-panel > p { color: #405852; }
+    .project-metrics { margin-top: 30px; border-top: 1px solid rgba(7,27,25,.25); }
+    .metric { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; padding: 18px 0; border-bottom: 1px solid rgba(7,27,25,.18); }
+    .metric strong { font: 600 1.35rem/1 var(--display); }
+    .metric span { color: #405852; text-align: right; }
+
+    .wins-head { display: grid; grid-template-columns: 1fr .8fr; gap: 80px; align-items: end; }
+    .wins .section-intro { margin: 0; }
+    .world-line { display: grid; grid-template-columns: repeat(5, 1fr); margin-top: 72px; border-top: 1px solid var(--line); }
+    .world-item { min-height: 290px; padding: 28px 20px 28px 0; border-right: 1px solid var(--line); }
+    .world-item + .world-item { padding-left: 20px; }
+    .world-item:last-child { border-right: 0; }
+    .world-item time { display: block; color: var(--orange); font: 600 clamp(1.6rem, 3vw, 2.65rem)/1 var(--display); }
+    .world-item p { margin: 72px 0 0; color: #c1d0c9; font-size: .9rem; }
+
+    .results { background: #0b2623; }
+    .results-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 64px; }
+    .result-block { padding: clamp(28px, 4vw, 46px); border: 1px solid var(--line); background: rgba(255,255,255,.025); }
+    .result-block h3 { font-size: clamp(1.4rem, 2.2vw, 2.15rem); line-height: 1.25; }
+    .result-meta { margin: 12px 0 30px; color: var(--aqua); font-size: .82rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+    .result-block ul { list-style: none; padding: 0; margin: 0; }
+    .result-block li { padding: 14px 0; border-top: 1px solid var(--line); color: #ccdad4; }
+    .result-block li strong { color: #fff; }
+
+    .contact { position: relative; background: var(--paper); color: var(--ink); overflow: hidden; }
+    .contact::after { content: ""; position: absolute; width: 520px; height: 520px; right: -220px; bottom: -250px; border-radius: 50%; border: 96px solid rgba(255,91,45,.9); }
+    .contact-layout { position: relative; z-index: 1; display: grid; grid-template-columns: 1.1fr .7fr; gap: 80px; }
+    .contact .section-title { max-width: 760px; }
+    .contact-details { padding-top: 10px; }
+    .detail { padding: 18px 0; border-top: 1px solid rgba(7,27,25,.2); }
+    .detail:last-child { border-bottom: 1px solid rgba(7,27,25,.2); }
+    .detail small { display: block; color: #62736e; font-size: .72rem; font-weight: 800; letter-spacing: .11em; text-transform: uppercase; }
+    .detail strong, .detail a { display: block; margin-top: 5px; font-size: 1rem; }
+    .detail a:hover { color: var(--orange); }
+    .support { margin-top: 56px; max-width: 790px; color: #405852; }
+    .support strong { color: var(--ink); }
+
+    footer { padding: 26px 0; border-top: 1px solid rgba(7,27,25,.15); background: var(--paper); color: #405852; }
+    .footer-row { display: flex; align-items: center; justify-content: space-between; gap: 20px; font-size: .82rem; }
+    .to-top { display: inline-flex; align-items: center; gap: 8px; color: var(--ink); font-weight: 700; }
+
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 380ms ease-out, transform 380ms ease-out; }
+    .reveal.is-visible { opacity: 1; transform: none; }
+
+    @media (max-width: 900px) {
+      .shell { width: min(100% - 30px, 1240px); }
+      .menu-toggle { display: grid; place-items: center; }
+      .nav-links { position: absolute; top: 82px; left: 15px; right: 15px; display: none; flex-direction: column; align-items: stretch; gap: 0; padding: 12px; background: rgba(7,27,25,.97); border: 1px solid var(--line); box-shadow: 0 24px 50px rgba(0,0,0,.28); }
+      .nav-links.is-open { display: flex; }
+      .nav-links a { padding: 14px; }
+      .hero-inner { grid-template-columns: 1fr; }
+      .hero-aside { display: none; }
+      .history-head, .wins-head, .place-layout, .contact-layout { grid-template-columns: 1fr; gap: 38px; }
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+      .stat:nth-child(2) { border-right: 0; }
+      .stat:nth-child(-n+2) { border-bottom: 1px solid rgba(255,255,255,.32); }
+      .stat:nth-child(3) { padding-left: 0; }
+      .world-line { grid-template-columns: 1fr; }
+      .world-item, .world-item + .world-item { min-height: 0; padding: 22px 0; border-right: 0; border-bottom: 1px solid var(--line); display: grid; grid-template-columns: 110px 1fr; gap: 20px; }
+      .world-item p { margin: 0; }
+    }
+
+    @media (max-width: 640px) {
+      .brand-name { max-width: 220px; font-size: .6rem; }
+      .hero { min-height: 760px; }
+      .hero-media img { object-position: 66% center; }
+      .hero-media::after { background: linear-gradient(0deg, rgba(4,20,18,.94) 0%, rgba(4,20,18,.65) 60%, rgba(4,20,18,.35) 100%); }
+      .hero-inner { padding-block: 132px 46px; }
+      h1 { font-size: clamp(2.6rem, 14vw, 4.2rem); }
+      .hero-actions { align-items: stretch; }
+      .btn { width: 100%; }
+      .stats-grid { min-height: 0; }
+      .stat { min-height: 120px; padding: 20px 14px; }
+      .stat span { font-size: .67rem; }
+      .timeline-row { grid-template-columns: 80px 1fr; gap: 14px; }
+      .timeline-index { display: none; }
+      .discipline-grid { grid-template-columns: 1fr; }
+      .discipline, .discipline + .discipline { min-height: 330px; padding: 30px 0; border-right: 0; border-bottom: 1px solid var(--line); }
+      .results-grid { grid-template-columns: 1fr; }
+      .world-item, .world-item + .world-item { grid-template-columns: 80px 1fr; }
+      .contact::after { opacity: .28; }
+      .footer-row { align-items: flex-start; flex-direction: column; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+      .reveal { opacity: 1; transform: none; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Перейти к содержанию</a>
+  <header class="site-header">
+    <div class="shell nav">
+      <a class="brand" href="#top" aria-label="На главную">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 28 28" fill="none"><path d="M4 9c4-4 7-4 10 0s6 4 10 0M4 15c4-4 7-4 10 0s6 4 10 0M4 21c4-4 7-4 10 0s6 4 10 0" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+        </span>
+        <span class="brand-name">Федерация рафтинга и гребного слалома</span>
+      </a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Открыть меню">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3 6h14M3 10h14M3 14h14" stroke="currentColor" stroke-width="1.5"/></svg>
+      </button>
+      <nav class="nav-links" id="nav-links" aria-label="Основная навигация">
+        <a href="#history">История</a><a href="#sports">Направления</a><a href="#place">Киргизка</a><a href="#wins">Результаты</a><a href="#contacts">Контакты</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero" id="top">
+      <div class="hero-media"><img src="assets/hero.webp" alt="Спортсмен проходит порог на слаломной байдарке"></div>
+      <div class="shell hero-inner">
+        <div class="hero-copy">
+          <p class="eyebrow">Томская область · Копылово · Киргизка</p>
+          <h1>Вода задаёт <span>характер</span></h1>
+          <p class="hero-lead">Развиваем рафтинг и гребной слалом, готовим спортсменов и создаём пространство для активной жизни на реке Киргизке.</p>
+          <div class="hero-actions"><a class="btn btn-primary" href="#sports">Наши направления <span aria-hidden="true">↘</span></a><a class="btn btn-ghost" href="#contacts">Где мы находимся</a></div>
+        </div>
+        <div class="hero-aside"><strong>с 2010</strong><span>официально развиваем спорт на бурной воде в Томской области</span></div>
+      </div>
+    </section>
+
+    <section class="stats" aria-label="Федерация в цифрах">
+      <div class="shell stats-grid">
+        <div class="stat"><strong>1984</strong><span>Начало школы</span></div>
+        <div class="stat"><strong>2</strong><span>Спортивных направления</span></div>
+        <div class="stat"><strong>5</strong><span>Мировых результатов</span></div>
+        <div class="stat"><strong>400+</strong><span>Школьников в проекте</span></div>
+      </div>
+    </section>
+
+    <section class="section history" id="history">
+      <div class="shell">
+        <div class="history-head reveal">
+          <div><p class="section-kicker">История</p><h2 class="section-title">Школа, выросшая у реки</h2></div>
+          <p class="section-intro">Томская школа спортивной гребли на бурной воде выросла из Копыловского туристического клуба, созданного Александром Иннокентьевичем Широковым.</p>
+        </div>
+        <div class="timeline reveal">
+          <div class="timeline-row"><div class="timeline-year">1984</div><p>В Копылово создан туристический клуб — точка отсчёта будущей спортивной школы.</p><span class="timeline-index">01</span></div>
+          <div class="timeline-row"><div class="timeline-year">2004</div><p>После перехода от туристического направления к спортивной гребле собрана первая команда по рафтингу.</p><span class="timeline-index">02</span></div>
+          <div class="timeline-row"><div class="timeline-year">2008</div><p>Алексей Широков формирует новую детскую команду — основу будущих международных результатов.</p><span class="timeline-index">03</span></div>
+          <div class="timeline-row"><div class="timeline-year">2010</div><p>Официально зарегистрирована Федерация рафтинга и гребного слалома Томской области.</p><span class="timeline-index">04</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section disciplines" id="sports">
+      <div class="shell">
+        <div class="reveal"><p class="section-kicker">Спортивные направления</p><h2 class="section-title">Команда и точность.<br>Сила и траектория.</h2><p class="section-intro">Спортсмены Томской области участвуют в региональных, всероссийских и международных соревнованиях.</p></div>
+        <div class="discipline-grid reveal">
+          <article class="discipline"><span class="discipline-no">НАПРАВЛЕНИЕ 01</span><div><h3>Рафтинг</h3><p>Командная дисциплина на надувных судах. Томские экипажи выступают в классах R4 и R6.</p></div></article>
+          <article class="discipline"><span class="discipline-no">НАПРАВЛЕНИЕ 02</span><div><h3>Гребной слалом</h3><p>Олимпийский вид спорта: спортсмен проходит водную трассу через систему ворот. В регионе проводятся старты в классах каяков и каноэ.</p></div></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section place" id="place">
+      <div class="shell place-layout">
+        <div class="reveal"><p class="section-kicker">Копылово · река Киргизка</p><h2 class="section-title">Река становится спортивной средой</h2><p class="section-intro">Киргизка служит площадкой для соревнований по рафтингу и гребному слалому. В апреле 2026 года здесь прошли Всероссийские соревнования среди юниоров и юниорок до 20 лет.</p><p class="river-note">Здесь соединяются спорт высших достижений, детская подготовка и семейная активность круглый год.</p></div>
+        <article class="project-panel reveal">
+          <p class="section-kicker">Проект 2026–2027</p>
+          <h3>«Маршрут здоровья: движение круглый год»</h3>
+          <p>Победитель второго конкурса Фонда президентских грантов 2026 года. Проект создаёт круглогодичный маршрут вдоль Киргизки для школьников, подростков и семей.</p>
+          <div class="project-metrics">
+            <div class="metric"><strong>400+</strong><span>школьников и подростков 10–17 лет</span></div>
+            <div class="metric"><strong>150+</strong><span>семей с детьми</span></div>
+            <div class="metric"><strong>2,75 млн ₽</strong><span>общий бюджет проекта</span></div>
+            <div class="metric"><strong>12 месяцев</strong><span>1 июля 2026 — 30 июня 2027</span></div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section wins" id="wins">
+      <div class="shell">
+        <div class="wins-head reveal"><div><p class="section-kicker">Победы</p><h2 class="section-title">От Копылово — на мировой пьедестал</h2></div><p class="section-intro">Воспитанники томской школы рафтинга становились призёрами и победителями крупнейших международных соревнований.</p></div>
+        <div class="world-line reveal">
+          <div class="world-item"><time>2011</time><p>Бронза чемпионата мира среди юношей в Коста-Рике.</p></div>
+          <div class="world-item"><time>2013</time><p>Чемпионы мира до 19 лет в Новой Зеландии.</p></div>
+          <div class="world-item"><time>2014</time><p>Серебро чемпионата мира в Бразилии и победа на первенстве Европы.</p></div>
+          <div class="world-item"><time>2015</time><p>Победа на чемпионате мира до 19 лет в Индонезии.</p></div>
+          <div class="world-item"><time>2021</time><p>«Одиссей-Азимут-Томск» выигрывает общий зачёт Кубка мира в Боснии и Герцеговине.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section results" aria-labelledby="results-title">
+      <div class="shell">
+        <div class="reveal"><p class="section-kicker">Сезон 2026</p><h2 class="section-title" id="results-title">Результаты на домашней воде</h2></div>
+        <div class="results-grid">
+          <article class="result-block reveal"><h3>Всероссийские соревнования</h3><p class="result-meta">16–20 апреля · около 70 участников</p><ul><li><strong>R4, юниоры:</strong> 1 место — «ТОМСК-КЕДР»; 2 место — «ТОМСК-КЕДР „Основа“».</li><li><strong>R4, юниорки:</strong> 2 место — «Одиссеюшка».</li><li><strong>R6, юниоры:</strong> 1 место — «ТОМСК-КЕДР „Основа“»; 3 место — «Одиссей-Барсы».</li><li><strong>R6, юниорки:</strong> 3 место — «Одиссеюшка».</li></ul></article>
+          <article class="result-block reveal"><h3>Чемпионат города Томска</h3><p class="result-meta">29–31 мая · рафтинг и слалом</p><ul><li><strong>Рафтинг, мужчины:</strong> 1 место — «Одиссей»; 2 место — «Одиссей-Монолит»; 3 место — «ТОМСК-КЕДР „Основа“».</li><li><strong>Рафтинг, женщины:</strong> 1 место — «Одиссеюшка».</li><li><strong>Гребной слалом:</strong> призовые места клуба «Одиссей» в классах К1м, С1м, К1ж и С2 смешанный.</li></ul></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section contact" id="contacts">
+      <div class="shell">
+        <div class="contact-layout">
+          <div class="reveal"><p class="section-kicker">Контакты</p><h2 class="section-title">Встречаемся там, где начинается движение</h2></div>
+          <div class="contact-details reveal">
+            <div class="detail"><small>Президент федерации</small><strong>Алексей Александрович Широков</strong></div>
+            <div class="detail"><small>Адрес</small><strong>634537, Томская область, Томский район, посёлок Копылово, ул. Ленина, д. 2А</strong></div>
+            <div class="detail"><small>Официальный сайт</small><a href="http://slalom-tomsk.ru/" target="_blank" rel="noopener">slalom-tomsk.ru ↗</a></div>
+            <div class="detail"><small>Дата регистрации</small><strong>30 ноября 2010 года</strong></div>
+          </div>
+        </div>
+        <p class="support reveal"><strong>Поддержка спорта.</strong> Генеральный спонсор соревнований 2026 года — компания «Сибагро». Питание спортсменов предоставила компания «САВА». Федерация благодарит Департамент спорта Томской области, тренеров, судей, родителей, друзей и болельщиков.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer><div class="shell footer-row"><span>© <span id="year">2026</span> Федерация рафтинга и гребного слалома Томской области</span><a class="to-top" href="#top">Наверх ↑</a></div></footer>
+
+  <script>
+    const menuButton = document.querySelector('.menu-toggle');
+    const menu = document.querySelector('.nav-links');
+    menuButton.addEventListener('click', () => {
+      const open = menu.classList.toggle('is-open');
+      menuButton.setAttribute('aria-expanded', String(open));
+      menuButton.setAttribute('aria-label', open ? 'Закрыть меню' : 'Открыть меню');
+    });
+    menu.querySelectorAll('a').forEach(link => link.addEventListener('click', () => {
+      menu.classList.remove('is-open');
+      menuButton.setAttribute('aria-expanded', 'false');
+      menuButton.setAttribute('aria-label', 'Открыть меню');
+    }));
+
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const reveals = document.querySelectorAll('.reveal');
+    if (reducedMotion || !('IntersectionObserver' in window)) {
+      reveals.forEach(el => el.classList.add('is-visible'));
+    } else {
+      const observer = new IntersectionObserver(entries => entries.forEach(entry => {
+        if (entry.isIntersecting) { entry.target.classList.add('is-visible'); observer.unobserve(entry.target); }
+      }), { threshold: .12 });
+      reveals.forEach(el => observer.observe(el));
+    }
+  </script>
+</body>
+</html>
