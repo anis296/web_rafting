@@ -253,8 +253,17 @@
     <section class="hero" id="top">
       <div class="hero-sticky">
         <div class="hero-media">
-          <video id="hero-video" autoplay loop muted playsinline preload="auto" poster="assets/hero.webp" aria-hidden="true">
-            <source src="assets/scroll-video.mp4" type="video/mp4">
+          <video
+            id="hero-video"
+            autoplay
+            loop
+            muted
+            playsinline
+            preload="none"
+            poster="assets/hero.webp"
+            data-mobile="assets/hero-mobile.mp4"
+            data-desktop="assets/hero-desktop.mp4"
+            aria-hidden="true">
           </video>
           <img class="hero-fallback" src="assets/hero.webp" alt="Спортсмен проходит порог на слаломной байдарке">
         </div>
@@ -379,12 +388,22 @@
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const hero = document.querySelector('.hero');
     const heroVideo = document.querySelector('#hero-video');
+    const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+    const slowConnection = connection?.saveData || ['slow-2g', '2g'].includes(connection?.effectiveType);
 
-    if (!reducedMotion && hero && heroVideo) {
+    if (!reducedMotion && !slowConnection && hero && heroVideo) {
+      const isMobile = window.matchMedia('(max-width: 640px)').matches;
+      heroVideo.src = isMobile ? heroVideo.dataset.mobile : heroVideo.dataset.desktop;
+
       const showVideo = () => hero.classList.add('is-ready');
+      const keepPoster = () => hero.classList.remove('is-ready');
+      const startVideo = () => heroVideo.play().then(showVideo).catch(keepPoster);
+
       heroVideo.addEventListener('playing', showVideo);
-      heroVideo.addEventListener('error', () => hero.classList.remove('is-ready'));
-      heroVideo.play().then(showVideo).catch(() => hero.classList.remove('is-ready'));
+      heroVideo.addEventListener('error', keepPoster);
+
+      if (document.readyState === 'complete') startVideo();
+      else window.addEventListener('load', startVideo, { once: true });
     }
 
     const reveals = document.querySelectorAll('.reveal');
