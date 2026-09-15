@@ -65,17 +65,22 @@
     .nav-links a:hover::after, .nav-links a:focus-visible::after { transform: scaleX(1); }
     .menu-toggle { display: none; width: 44px; height: 44px; border: 1px solid var(--line); border-radius: 50%; color: var(--paper); background: rgba(7,27,25,.28); }
 
-    .hero { position: relative; min-height: 850px; height: 100svh; isolation: isolate; overflow: hidden; }
+    .hero { position: relative; height: 100svh; min-height: 700px; background: var(--ink); }
+    .hero-sticky { position: relative; height: 100%; min-height: 700px; isolation: isolate; overflow: hidden; }
     .hero-media { position: absolute; inset: 0; z-index: -2; }
-    .hero-media img { width: 100%; height: 100%; object-fit: cover; object-position: 58% center; }
+    .hero-media video, .hero-media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 58% center; }
+    .hero-media video { opacity: 0; transition: opacity 280ms ease-out; }
+    .hero-fallback { opacity: 1; transition: opacity 280ms ease-out; }
+    .hero.is-ready .hero-media video { opacity: 1; }
+    .hero.is-ready .hero-fallback { opacity: 0; }
     .hero-media::after {
       content: ""; position: absolute; inset: 0;
       background:
         linear-gradient(90deg, rgba(4,20,18,.94) 0%, rgba(4,20,18,.72) 42%, rgba(4,20,18,.12) 76%),
         linear-gradient(0deg, rgba(4,20,18,.88) 0%, transparent 46%, rgba(4,20,18,.26) 100%);
     }
-    .hero::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: var(--line); }
-    .hero-inner { height: 100%; display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(280px, .9fr); align-items: end; padding-block: 160px 72px; }
+    .hero-sticky::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: var(--line); }
+    .hero-inner { position: relative; z-index: 1; height: 100%; display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(280px, .9fr); align-items: end; padding-block: 160px 72px; }
     .hero-copy { max-width: 860px; }
     .eyebrow { display: flex; align-items: center; gap: 14px; margin: 0 0 24px; color: #cbd7d2; font-size: .74rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
     .eyebrow::before { content: ""; width: 44px; height: 2px; background: var(--orange); }
@@ -92,7 +97,6 @@
     .hero-aside { justify-self: end; align-self: end; width: min(100%, 300px); padding: 22px 0 6px; border-top: 1px solid rgba(255,255,255,.4); }
     .hero-aside strong { display: block; font: 600 2rem/1 var(--display); }
     .hero-aside span { display: block; margin-top: 9px; color: #c1cec8; font-size: .86rem; }
-
     .stats { background: var(--orange); color: #fff; }
     .stats-grid { min-height: 152px; display: grid; grid-template-columns: repeat(4, 1fr); }
     .stat { display: flex; flex-direction: column; justify-content: center; padding: 24px clamp(16px, 3vw, 40px); border-right: 1px solid rgba(255,255,255,.32); }
@@ -194,8 +198,9 @@
 
     @media (max-width: 640px) {
       .brand-name { max-width: 220px; font-size: .6rem; }
-      .hero { min-height: 760px; }
-      .hero-media img { object-position: 66% center; }
+      .hero { height: 100svh; min-height: 640px; }
+      .hero-sticky { min-height: 640px; }
+      .hero-media video, .hero-media img { object-position: 66% center; }
       .hero-media::after { background: linear-gradient(0deg, rgba(4,20,18,.94) 0%, rgba(4,20,18,.65) 60%, rgba(4,20,18,.35) 100%); }
       .hero-inner { padding-block: 132px 46px; }
       h1 { font-size: clamp(2.6rem, 14vw, 4.2rem); }
@@ -218,6 +223,10 @@
       html { scroll-behavior: auto; }
       *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
       .reveal { opacity: 1; transform: none; }
+      .hero { height: 100svh; min-height: 700px; }
+      .hero-sticky { position: relative; min-height: 700px; }
+      .hero-media video { display: none; }
+      .hero-fallback, .hero.is-ready .hero-fallback { opacity: 1; }
     }
   </style>
 </head>
@@ -242,15 +251,22 @@
 
   <main id="main">
     <section class="hero" id="top">
-      <div class="hero-media"><img src="assets/hero.webp" alt="Спортсмен проходит порог на слаломной байдарке"></div>
-      <div class="shell hero-inner">
-        <div class="hero-copy">
-          <p class="eyebrow">Томская область · Копылово · Киргизка</p>
-          <h1>Вода задаёт <span>характер</span></h1>
-          <p class="hero-lead">Развиваем рафтинг и гребной слалом, готовим спортсменов и создаём пространство для активной жизни на реке Киргизке.</p>
-          <div class="hero-actions"><a class="btn btn-primary" href="#sports">Наши направления <span aria-hidden="true">↘</span></a><a class="btn btn-ghost" href="#contacts">Где мы находимся</a></div>
+      <div class="hero-sticky">
+        <div class="hero-media">
+          <video id="hero-video" autoplay loop muted playsinline preload="auto" poster="assets/hero.webp" aria-hidden="true">
+            <source src="assets/scroll-video.mp4" type="video/mp4">
+          </video>
+          <img class="hero-fallback" src="assets/hero.webp" alt="Спортсмен проходит порог на слаломной байдарке">
         </div>
-        <div class="hero-aside"><strong>с 2010</strong><span>официально развиваем спорт на бурной воде в Томской области</span></div>
+        <div class="shell hero-inner">
+          <div class="hero-copy">
+            <p class="eyebrow">Томская область · Копылово · Киргизка</p>
+            <h1>Вода задаёт <span>характер</span></h1>
+            <p class="hero-lead">Развиваем рафтинг и гребной слалом, готовим спортсменов и создаём пространство для активной жизни на реке Киргизке.</p>
+            <div class="hero-actions"><a class="btn btn-primary" href="#sports">Наши направления <span aria-hidden="true">↘</span></a><a class="btn btn-ghost" href="#contacts">Где мы находимся</a></div>
+          </div>
+          <div class="hero-aside"><strong>с 2010</strong><span>официально развиваем спорт на бурной воде в Томской области</span></div>
+        </div>
       </div>
     </section>
 
@@ -361,6 +377,16 @@
     }));
 
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const hero = document.querySelector('.hero');
+    const heroVideo = document.querySelector('#hero-video');
+
+    if (!reducedMotion && hero && heroVideo) {
+      const showVideo = () => hero.classList.add('is-ready');
+      heroVideo.addEventListener('playing', showVideo);
+      heroVideo.addEventListener('error', () => hero.classList.remove('is-ready'));
+      heroVideo.play().then(showVideo).catch(() => hero.classList.remove('is-ready'));
+    }
+
     const reveals = document.querySelectorAll('.reveal');
     if (reducedMotion || !('IntersectionObserver' in window)) {
       reveals.forEach(el => el.classList.add('is-visible'));
