@@ -6,9 +6,11 @@
   <meta name="description" content="Федерация рафтинга и гребного слалома Томской области: спортивные направления, история, соревнования и проект «Маршрут здоровья».">
   <meta name="theme-color" content="#071b19">
   <title>Федерация рафтинга и гребного слалома Томской области</title>
+  <link rel="preload" as="image" href="assets/hero.webp" type="image/webp" fetchpriority="high">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Unbounded:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Unbounded:wght@500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Unbounded:wght@500;600;700&display=swap" rel="stylesheet"></noscript>
   <style>
     :root {
       --ink: #071b19;
@@ -260,12 +262,10 @@
             muted
             playsinline
             preload="none"
-            poster="assets/hero.webp"
-            data-mobile="assets/hero-mobile.mp4"
             data-desktop="assets/hero-desktop.mp4"
             aria-hidden="true">
           </video>
-          <img class="hero-fallback" src="assets/hero.webp" alt="Спортсмен проходит порог на слаломной байдарке">
+          <img class="hero-fallback" src="assets/hero.webp" alt="Спортсмен проходит порог на слаломной байдарке" fetchpriority="high" decoding="async">
         </div>
         <div class="shell hero-inner">
           <div class="hero-copy">
@@ -389,21 +389,29 @@
     const hero = document.querySelector('.hero');
     const heroVideo = document.querySelector('#hero-video');
     const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-    const slowConnection = connection?.saveData || ['slow-2g', '2g'].includes(connection?.effectiveType);
+    const isMobile = window.matchMedia('(max-width: 640px)').matches;
+    const slowConnection = connection?.saveData || ['slow-2g', '2g', '3g'].includes(connection?.effectiveType);
+    const shouldPlayVideo = !reducedMotion && !slowConnection && !isMobile && hero && heroVideo;
 
-    if (!reducedMotion && !slowConnection && hero && heroVideo) {
-      const isMobile = window.matchMedia('(max-width: 640px)').matches;
-      heroVideo.src = isMobile ? heroVideo.dataset.mobile : heroVideo.dataset.desktop;
-
+    if (shouldPlayVideo) {
       const showVideo = () => hero.classList.add('is-ready');
       const keepPoster = () => hero.classList.remove('is-ready');
-      const startVideo = () => heroVideo.play().then(showVideo).catch(keepPoster);
 
-      heroVideo.addEventListener('playing', showVideo);
-      heroVideo.addEventListener('error', keepPoster);
+      heroVideo.addEventListener('playing', showVideo, { once: true });
+      heroVideo.addEventListener('error', keepPoster, { once: true });
 
-      if (document.readyState === 'complete') startVideo();
-      else window.addEventListener('load', startVideo, { once: true });
+      const startVideo = () => {
+        heroVideo.src = heroVideo.dataset.desktop;
+        heroVideo.play().then(showVideo).catch(keepPoster);
+      };
+
+      const deferVideo = () => {
+        if ('requestIdleCallback' in window) requestIdleCallback(startVideo, { timeout: 2500 });
+        else setTimeout(startVideo, 1500);
+      };
+
+      if (document.readyState === 'complete') deferVideo();
+      else window.addEventListener('load', deferVideo, { once: true });
     }
 
     const reveals = document.querySelectorAll('.reveal');
